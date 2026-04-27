@@ -15,6 +15,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 
 // Key is injected at build/run time via --dart-define=GEMINI_API_KEY=...
 // It is NEVER stored in any source file. See README for run instructions.
@@ -27,7 +29,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Call runApp() IMMEDIATELY — never block on network calls before this!
+  // Call runApp() IMMEDIATELY  never block on network calls before this!
   runApp(const DevForceApp());
 }
 
@@ -191,7 +193,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
       final String? photoUrl = currentUser.photoURL;
 
-      // Use the user's UID as the document ID — this is the key change!
+      // Use the user's UID as the document ID  this is the key change!
       // Now the profile is tied to their Google account, not the device.
       // .set() is idempotent: safe to call even if the doc already exists.
       await FirebaseFirestore.instance
@@ -549,7 +551,7 @@ class SwipeScreen extends StatefulWidget {
 class _SwipeScreenState extends State<SwipeScreen> {
   List<Map<String, dynamic>> _potentialTeammates = [];
   Map<String, dynamic>? _myProfile;
-  // uid → Gemini analysis (score, headline, reason, suggestedRole, projectIdea)
+  // uid  Gemini analysis (score, headline, reason, suggestedRole, projectIdea)
   final Map<String, Map<String, dynamic>> _geminiAnalyses = {};
   bool _isLoading = true;
   String? _errorMessage;
@@ -640,7 +642,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
           _potentialTeammates = others;
           _isLoading = false;
         });
-        // Kick off Gemini analyses in the background — cards show immediately
+        // Kick off Gemini analyses in the background  cards show immediately
         _computeGeminiAnalyses();
       }
     } catch (e) {
@@ -735,7 +737,7 @@ Developer B:
 Return JSON:
 {
   "score": <40-99>,
-  "headline": "<≤8 word reason they match>",
+  "headline": "<8 word reason they match>",
   "reason": "<2 sentences: technical + interest fit>",
   "suggestedRole": "<role Developer B would play>",
   "projectIdea": "<one creative Google-tech GDG hackathon project idea>"
@@ -868,7 +870,7 @@ Return JSON:
                 child: _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : _errorMessage != null
-                    // ── ERROR STATE ──────────────────────────────────────────
+                    //  ERROR STATE 
                     ? Center(
                         child: Padding(
                           padding: const EdgeInsets.all(24.0),
@@ -919,7 +921,7 @@ Return JSON:
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Text(
-                              "No more matches in your area! 😭",
+                              "No more matches in your area! ",
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -939,7 +941,7 @@ Return JSON:
                           ],
                         ),
                       )
-                    // ── SWIPER ───────────────────────────────────────────────
+                    //  SWIPER 
                     : CardSwiper(
                         controller: controller,
                         cardsCount: _potentialTeammates.length,
@@ -1059,7 +1061,7 @@ Return JSON:
     return true;
   }
 
-  // Card UI — Gemini-powered when analysis is ready, local score as instant fallback
+  // Card UI  Gemini-powered when analysis is ready, local score as instant fallback
   Widget _buildTeammateCard(Map<String, dynamic> user) {
     final identity = user['developerIdentity'] ?? {};
     final matchData = user['matchmakerData'] ?? {};
@@ -1113,7 +1115,7 @@ Return JSON:
         child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // ── Match score badge ─────────────────────────────────────────
+          //  Match score badge 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -1182,7 +1184,7 @@ Return JSON:
           ),
           const SizedBox(height: 16),
 
-          // ── Profile picture ───────────────────────────────────────────
+          //  Profile picture 
           CircleAvatar(
             radius: 48,
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -1200,7 +1202,7 @@ Return JSON:
           ),
           const SizedBox(height: 12),
 
-          // ── Name ──────────────────────────────────────────────────────
+          //  Name 
           Text(
             name,
             style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
@@ -1208,7 +1210,7 @@ Return JSON:
           ),
           const SizedBox(height: 4),
 
-          // ── Role + Experience badge ───────────────────────────────────
+          //  Role + Experience badge 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -1241,7 +1243,7 @@ Return JSON:
           ),
           const SizedBox(height: 16),
 
-          // ── Skills chips ──────────────────────────────────────────────
+          //  Skills chips 
           Wrap(
             spacing: 6.0,
             runSpacing: 6.0,
@@ -1257,7 +1259,7 @@ Return JSON:
           ),
           const SizedBox(height: 16),
 
-          // ── Match reason ──────────────────────────────────────────────
+          //  Match reason 
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
@@ -1275,7 +1277,7 @@ Return JSON:
               ),
             ),
           ),
-          // ── Gemini project idea ───────────────────────────────────────
+          //  Gemini project idea 
           if (projectIdea != null) ...[
             const SizedBox(height: 8),
             Container(
@@ -1312,7 +1314,7 @@ Return JSON:
           if (suggestedRole != null) ...[
             const SizedBox(height: 6),
             Text(
-              '🎯 Team role: $suggestedRole',
+              ' Team role: $suggestedRole',
               style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
               textAlign: TextAlign.center,
             ),
@@ -1324,7 +1326,7 @@ Return JSON:
   }
 }
 
-// THE "IT'S A MATCH" POPUP — powered by Gemini
+// THE "IT'S A MATCH" POPUP  powered by Gemini
 class MatchDialog extends StatefulWidget {
   final Map<String, dynamic> matchedUser;
   final Map<String, dynamic>? myProfile;
@@ -1730,66 +1732,59 @@ class EventLandingScreen extends StatelessWidget {
               height: 48,
               child: ElevatedButton(
                 onPressed: () async {
-                  try {
-                    // 1. Create the instance
-                    final GoogleSignIn googleSignIn = GoogleSignIn();
+                try {
+                  UserCredential? userCredential;
 
-                    // 2. Trigger the login popup
-                    final GoogleSignInAccount? googleUser = await googleSignIn
-                        .signIn();
+                  // 1. Detect which platform we are on!
+                  if (kIsWeb) {
+                    // --- THE WEB LOGIN FLOW ---
+                    GoogleAuthProvider googleProvider = GoogleAuthProvider();
+                    userCredential = await FirebaseAuth.instance.signInWithPopup(googleProvider);
+                  } else {
+                    // --- THE ANDROID LOGIN FLOW ---
+                    final GoogleSignIn googleSignIn = GoogleSignIn();
+                    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
                     if (googleUser != null) {
-                      // 3. Get the auth tokens
-                      final GoogleSignInAuthentication googleAuth =
-                          await googleUser.authentication;
-
-                      // 4. Sign into Firebase
-                      final AuthCredential credential =
-                          GoogleAuthProvider.credential(
-                            accessToken: googleAuth.accessToken,
-                            idToken: googleAuth.idToken,
-                          );
-
-                      final userCredential = await FirebaseAuth.instance
-                          .signInWithCredential(credential);
-                      final uid = userCredential.user?.uid;
-
-                      if (uid != null && context.mounted) {
-                        // 5. Check if this Google account already has a profile
-                        final doc = await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(uid)
-                            .get();
-
-                        if (!context.mounted) return;
-
-                        if (doc.exists) {
-                          // Returning user — skip onboarding, go straight to app
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainScreen(),
-                            ),
-                          );
-                        } else {
-                          // New user — collect their profile details
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const OnboardingScreen(),
-                            ),
-                          );
-                        }
-                      }
+                      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+                      final AuthCredential credential = GoogleAuthProvider.credential(
+                        accessToken: googleAuth.accessToken,
+                        idToken: googleAuth.idToken,
+                      );
+                      userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
                     }
-                  } catch (e) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Login failed: $e')),
+                  }
+
+                  // 2. Check the user ID and Route them
+                  final uid = userCredential?.user?.uid;
+
+                  if (uid != null && context.mounted) {
+                    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+                    if (!context.mounted) return;
+
+                    if (doc.exists) {
+                      // Returning user
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MainScreen()),
+                      );
+                    } else {
+                      // New user
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
                       );
                     }
                   }
-                },
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Login failed: $e')),
+                    );
+                  }
+                }
+              },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Colors.white,
@@ -1955,7 +1950,7 @@ class _DevMapScreenState extends State<DevMapScreen> {
       if (!serviceEnabled) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('⚠️ Turn on Location/GPS in phone settings')),
+            const SnackBar(content: Text(' Turn on Location/GPS in phone settings')),
           );
         }
         setState(() => _locating = false);
@@ -1969,7 +1964,7 @@ class _DevMapScreenState extends State<DevMapScreen> {
       if (perm == LocationPermission.denied || perm == LocationPermission.deniedForever) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('⚠️ Location permission required. Please allow in settings.')),
+            const SnackBar(content: Text(' Location permission required. Please allow in settings.')),
           );
         }
         setState(() => _locating = false);
@@ -1983,7 +1978,9 @@ class _DevMapScreenState extends State<DevMapScreen> {
           locationSettings: const LocationSettings(accuracy: LocationAccuracy.medium),
         ).timeout(const Duration(seconds: 10));
       } catch (_) {
-        pos = await Geolocator.getLastKnownPosition();
+        if (!kIsWeb) {
+          pos = await Geolocator.getLastKnownPosition();
+        }
       }
 
       // Validate the position is real
@@ -1991,7 +1988,7 @@ class _DevMapScreenState extends State<DevMapScreen> {
           pos.latitude == 0.0 && pos.longitude == 0.0) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('⚠️ Could not get GPS. Try again outside.')),
+            const SnackBar(content: Text(' Could not get GPS. Try again outside.')),
           );
         }
         setState(() => _locating = false);
@@ -2018,7 +2015,7 @@ class _DevMapScreenState extends State<DevMapScreen> {
         }
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('✅ Location saved!'),
+            content: Text(' Location saved!'),
             backgroundColor: Colors.green,
             duration: Duration(seconds: 2),
           ),
@@ -2122,7 +2119,7 @@ class _DevMapScreenState extends State<DevMapScreen> {
                         color: Colors.red.shade50,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Text('📍 ${km}km away', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red.shade700)),
+                      child: Text(' ${km}km away', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red.shade700)),
                     ),
                     if (skills.isNotEmpty) ...[
                       const SizedBox(height: 10),
@@ -2729,17 +2726,18 @@ class SettingsScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             onTap: () async {
-              // Sign out of both Google and Firebase
-              await GoogleSignIn().signOut();
+              // Sign out of Google (Android only, Web handles it via Firebase)
+              if (!kIsWeb) {
+                await GoogleSignIn().signOut();
+              }
+              // Sign out of Firebase
               await FirebaseAuth.instance.signOut();
 
               // Return to Landing Page
               if (context.mounted) {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const EventLandingScreen(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const EventLandingScreen()),
                   (route) => false,
                 );
               }
@@ -3010,7 +3008,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-// ── CREATIVE WIDGETS (ANIMATED MESH & GLASSMORPHISM) ──
+//  CREATIVE WIDGETS (ANIMATED MESH & GLASSMORPHISM) 
 
 class AnimatedMeshBackground extends StatefulWidget {
   final Widget child;
@@ -3114,7 +3112,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       setState(() => _permissionGranted = status.isGranted);
       if (status.isGranted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('✅ Notifications enabled!'), backgroundColor: Colors.green),
+          const SnackBar(content: Text(' Notifications enabled!'), backgroundColor: Colors.green),
         );
         // Get FCM token
         final token = await FirebaseMessaging.instance.getToken();
@@ -3304,10 +3302,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 children: [
                   Text("You'll receive notifications for:", style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
-                  Text("• New matches from team discovery"),
-                  Text("• Chat messages from teammates"),
-                  Text("• GDG Hackathon updates & deadlines"),
-                  Text("• New developers joining near you"),
+                  Text(" New matches from team discovery"),
+                  Text(" Chat messages from teammates"),
+                  Text(" GDG Hackathon updates & deadlines"),
+                  Text(" New developers joining near you"),
                 ],
               ),
             ),
