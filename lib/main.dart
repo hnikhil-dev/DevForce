@@ -1032,15 +1032,17 @@ Return JSON:
         }, SetOptions(merge: true));
       }
 
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => MatchDialog(
-          matchedUser: swipedUser,
-          myProfile: _myProfile,
-          geminiAnalysis: _geminiAnalyses[uid],
-        ),
-      );
+      if (mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => MatchDialog(
+            matchedUser: swipedUser,
+            myProfile: _myProfile,
+            geminiAnalysis: _geminiAnalyses[uid],
+          ),
+        );
+      }
     } else if (direction == CardSwiperDirection.left) {
       // ── RECORD REJECTION on left swipe ───────────────────────────────
       // This ensures rejected profiles stay at the bottom of the stack
